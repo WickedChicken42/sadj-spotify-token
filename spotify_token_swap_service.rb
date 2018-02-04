@@ -80,12 +80,15 @@ module SpotifyTokenSwapService
     private
 
     def default_options
-
+      {
+        headers: { Authorization: authorization_basic }
+      }
     end
 
-    # def authorization_header
-    #   { Authorization: "Basic %s" % Base64.strict_encode64("%s:%s" % [client_id, client_secret]) }
-    # end
+    def authorization_basic
+      client_config = [config.client_id, config.client_secret]
+      "Basic %s" % Base64.strict_encode64("%s:%s" % client_config)
+    end
   end
 
   # SpotifyTokenSwapService::App
