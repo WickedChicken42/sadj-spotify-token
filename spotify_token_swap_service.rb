@@ -108,7 +108,11 @@ module SpotifyTokenSwapService
 
     def run
       response = httparty_instance.parsed_response.with_indifferent_access
-      response[:refresh_token] = encrypt_refresh_token(response[:refresh_token])
+
+      if response[:refresh_token].present?
+        response[:refresh_token] = encrypt_refresh_token(response[:refresh_token])
+      end
+
       [httparty_instance.response.code.to_i, response]
     end
 
