@@ -13,7 +13,7 @@ module SpotifyTokenSwapService
   # This deals with configuration, loaded through .env
   #
   module ConfigHelper
-    def config(*)
+    def config
       @config ||= Config.new
     end
   end
