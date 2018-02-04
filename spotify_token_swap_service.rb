@@ -17,7 +17,7 @@ module SpotifyTokenSwapService
   #
   module ConfigHelper
     def config
-      @config ||= Config.new
+      @config ||= Config.instance
     end
   end
 
@@ -29,6 +29,8 @@ module SpotifyTokenSwapService
 
   class Config < Struct.new(:client_id, :client_secret,
                             :client_callback_url, :encryption_secret)
+    include Singleton
+
     def initialize
       self.client_id = ENV["SPOTIFY_CLIENT_ID"]
       self.client_secret = ENV["SPOTIFY_CLIENT_SECRET"]
@@ -60,7 +62,8 @@ module SpotifyTokenSwapService
   # Make the HTTP requests, as handled by our lovely host, HTTParty.
   #
   class HTTP
-    include HTTParty
+    include HTTParty,
+            ConfigHelper
     base_uri 'https://accounts.spotify.com'
 
     def initialize(config:)
