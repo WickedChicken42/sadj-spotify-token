@@ -1,17 +1,11 @@
 require "sinatra"
-require "net/http"
-require "net/https"
 require "base64"
 require "json"
-require "encrypted_strings"
 require "active_support/all"
-
-# Override local environment variables.
-if File.exists?(".env")
-  require "dotenv"
-  Dotenv.load
-  Dotenv.overload
-end
+require "encrypted_strings"
+require "dotenv/load" if File.exists?(".env")
+require "net/http"
+require "net/https"
 
 module SpotifyTokenSwapService
   # SpotifyTokenSwapService::Config
