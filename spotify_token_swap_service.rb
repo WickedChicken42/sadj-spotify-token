@@ -48,6 +48,10 @@ module SpotifyTokenSwapService
       encryption_secret.present?
     end
 
+    def authorization_header
+      { Authorization: "Basic %s" % Base64.strict_encode64("%s:%s" % [client_id, client_secret]) }
+    end
+
     private
 
     def validate_client_credentials
@@ -57,10 +61,28 @@ module SpotifyTokenSwapService
 
   # SpotifyTokenSwapService::HTTP
   #
-  # The code needed to make it go all Sinatra, beautiful.
+  # Make the HTTP requests, as handled by our lovely host, HTTParty.
   #
   class HTTP
     include HTTParty
+    base_uri 'https://accounts.spotify.com'
+
+    def initialize(config:)
+      @config = config
+    end
+
+    def token(auth_code:)
+      options = default_options.deep_merge(query: {
+      })
+
+      self.class.post("/api/token", options)
+    end
+
+    private
+
+    def default_options
+
+    end
   end
 
   # SpotifyTokenSwapService::App
