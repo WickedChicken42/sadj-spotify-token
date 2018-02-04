@@ -196,17 +196,22 @@ module SpotifyTokenSwapService
       status status_code
       json response
     rescue StandardError => e
+      status 400
       json error: e
     end
 
     post "/api/refresh_token" do
       params = DecryptParameters.new(params).run
-      http = HTTP.new.refresh_token(refresh_token: params[:refresh_token]).run
+      http = HTTP.new.refresh_token(refresh_token: params[:refresh_token])
       status_code, response = EmptyMiddleware.new(http).run
 
       status status_code
       json response
+    rescue OpenSSL::Cipher::CipherError
+      status 400
+      json error:
     rescue StandardError => e
+      status 400
       json error: e
     end
   end
