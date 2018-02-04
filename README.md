@@ -2,12 +2,12 @@
 
 # Token Swap Service for Spotify 🔑 ⛓
 
-**TL;DR** This is a super tiny [Ruby][ruby] service for supporting [Authorization Code Flow][authorization-code-flow] on iOS, Android, and static frontend apps with Spotify.
+**TL;DR** This is a super tiny [Ruby][ruby] service for supporting [Authorization Code Flow][authorization-code-flow] on iOS, Android, and static web apps with Spotify.
 
-When should I use [Implicit Grant Flow][implicit-grant-flow] instead of [Authorization Code Flow][authorization-code-flow]?
+When should I use [Authorization Code Flow][authorization-code-flow] instead of [Implicit Grant Flow][implicit-grant-flow]?
 
-* You only want users to authenticate once, but your application will never go into production, so security isn't a priority.
-* You don't mind users re-authenticating every 60 minutes.
+* You don't want users to have to re-authenticate every 60 minutes.
+* You don't want to insecurely expose your client secret to third parties.
 
 Read more about token swapping [on Spotify for Developers][token-swap-refresh-guide].
 
