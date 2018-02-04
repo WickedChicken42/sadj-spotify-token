@@ -113,6 +113,3 @@ post '/refresh' do
     return response.body
 
 end
-
-
-
