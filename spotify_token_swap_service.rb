@@ -74,15 +74,19 @@ module SpotifyTokenSwapService
     get "/" do
       config.has_encryption_secret?.inspect
     rescue StandardError => e
-      json error: "Hi world"
+      json error: e
     end
 
     post "/api/swap_for_access_token" do
       "Hi world"
+    rescue StandardError => e
+      json error: e
     end
 
     post "/api/refresh_token" do
       "Hey world"
+    rescue StandardError => e
+      json error: e
     end
   end
 end
