@@ -73,7 +73,7 @@ module SpotifyTokenSwapService
         code: auth_code
       })
 
-      self.class.post("/api/token", options).parsed_response
+      self.class.post("/api/token", options)
     end
 
     private
@@ -89,6 +89,49 @@ module SpotifyTokenSwapService
         config.client_id,
         config.client_secret
       ])
+    end
+  end
+
+  # SpotifyTokenSwapService::EncryptionMiddleware
+  #
+  # The code needed to apply encryption middleware for refresh tokens.
+  #
+  class EncryptionMiddleware < Struct.new(:httparty_instance)
+    include ConfigHelper
+
+    def run
+      response = httparty_response.parsed_response.with_indifferent_access
+      response[:refresh_token] = encrypt_refresh_token(response[:refresh_token])
+      [httparty_response.response.code.to_i, response]
+    end
+
+    private
+
+    def encrypt_refresh_token(refresh_token)
+      if config.has_encryption_secret?
+        refresh_token.encrypt(:symmetric, password: config.encryption_secret)
+      end || refresh_token
+    end
+  end
+
+  # SpotifyTokenSwapService::DecryptionMiddleware
+  #
+  # The code needed to apply decryption middleware for refresh tokens.
+  #
+  class DecryptionMiddleware < Struct.new(:params)
+    include ConfigHelper
+
+    def run
+      params = params.with_indifferent_access
+      params[:refresh_token] = decrypt_refresh_token(params[:refresh_token])
+    end
+
+    private
+
+    def decrypt_refresh_token(refresh_token)
+      if config.has_encryption_secret?
+        refresh_token.decrypt(:symmetric, password: config.encryption_secret)
+      end || refresh_token
     end
   end
 
