@@ -107,9 +107,9 @@ module SpotifyTokenSwapService
     include ConfigHelper
 
     def run
-      response = httparty_response.parsed_response.with_indifferent_access
+      response = httparty_instance.parsed_response.with_indifferent_access
       response[:refresh_token] = encrypt_refresh_token(response[:refresh_token])
-      [httparty_response.response.code.to_i, response]
+      [httparty_instance.response.code.to_i, response]
     end
 
     private
@@ -152,8 +152,8 @@ module SpotifyTokenSwapService
     include ConfigHelper
 
     def run
-      response = httparty_response.parsed_response.with_indifferent_access
-      [httparty_response.response.code.to_i, response]
+      response = httparty_instance.parsed_response.with_indifferent_access
+      [httparty_instance.response.code.to_i, response]
     end
   end
 
