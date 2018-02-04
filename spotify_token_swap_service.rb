@@ -26,6 +26,16 @@ module SpotifyTokenSwapService
       self.client_callback_url = ENV["SPOTIFY_CLIENT_CALLBACK_URL"]
       self.encryption_secret = ENV["ENCRYPTION_SECRET"]
     end
+
+    def has_client_credentials?
+      client_id.present? &&
+      client_secret.present? &&
+      client_callback_url.present?
+    end
+
+    def has_encryption_secret?
+      encryption_secret.present?
+    end
   end
 
   # SpotifyTokenSwapService::App
@@ -38,7 +48,7 @@ module SpotifyTokenSwapService
     helpers ConfigHelper
 
     get "/" do
-      config.to_json
+      config.has_encryption_secret?.inspect
     end
 
     post "/api/swap_for_access_token" do
