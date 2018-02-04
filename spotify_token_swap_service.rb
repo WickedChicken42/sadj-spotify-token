@@ -48,10 +48,6 @@ module SpotifyTokenSwapService
       encryption_secret.present?
     end
 
-    def authorization_header
-      { Authorization: "Basic %s" % Base64.strict_encode64("%s:%s" % [client_id, client_secret]) }
-    end
-
     private
 
     def validate_client_credentials
@@ -83,6 +79,10 @@ module SpotifyTokenSwapService
     def default_options
 
     end
+
+    # def authorization_header
+    #   { Authorization: "Basic %s" % Base64.strict_encode64("%s:%s" % [client_id, client_secret]) }
+    # end
   end
 
   # SpotifyTokenSwapService::App
