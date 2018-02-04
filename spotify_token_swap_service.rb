@@ -4,8 +4,14 @@ require "net/https"
 require "base64"
 require "json"
 require "encrypted_strings"
-require "dotenv/load"
 require "active_support/all"
+
+# Override local environment variables.
+if File.exists?(".env")
+  require "dotenv"
+  Dotenv.load
+  Dotenv.overload
+end
 
 module SpotifyTokenSwapService
   # SpotifyTokenSwapService::Config
@@ -21,10 +27,10 @@ module SpotifyTokenSwapService
   class Config < Struct.new(:client_id, :client_secret,
                             :client_callback_url, :encryption_secret)
     def initialize
-      @client_id = ENV["SPOTIFY_CLIENT_ID"]
-      @client_secret = ENV["SPOTIFY_CLIENT_SECRET"]
-      @client_callback_url = ENV["SPOTIFY_CLIENT_CALLBACK_URL"]
-      @encryption_secret = ENV["ENCRYPTION_SECRET"]
+      self.client_id = ENV["SPOTIFY_CLIENT_ID"]
+      self.client_secret = ENV["SPOTIFY_CLIENT_SECRET"]
+      self.client_callback_url = ENV["SPOTIFY_CLIENT_CALLBACK_URL"]
+      self.encryption_secret = ENV["ENCRYPTION_SECRET"]
     end
   end
 
@@ -38,7 +44,7 @@ module SpotifyTokenSwapService
     helpers ConfigHelper
 
     get "/" do
-      config.inspect
+      config.to_json
     end
 
     post "/api/swap_for_access_token" do
