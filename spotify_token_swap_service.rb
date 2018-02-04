@@ -66,15 +66,14 @@ module SpotifyTokenSwapService
             ConfigHelper
     base_uri 'https://accounts.spotify.com'
 
-    def initialize(config:)
-      @config = config
-    end
-
     def token(auth_code:)
       options = default_options.deep_merge(query: {
+        grant_type: "authorization_code",
+        redirect_uri: config.client_callback_url,
+        code: auth_code
       })
 
-      self.class.post("/api/token", options)
+      self.class.post("/api/token", options).parsed_response
     end
 
     private
@@ -86,8 +85,10 @@ module SpotifyTokenSwapService
     end
 
     def authorization_basic
-      client_config = [config.client_id, config.client_secret]
-      "Basic %s" % Base64.strict_encode64("%s:%s" % client_config)
+      "Basic %s" % Base64.strict_encode64("%s:%s" % [
+        config.client_id,
+        config.client_secret
+      ])
     end
   end
 
