@@ -183,12 +183,6 @@ module SpotifyTokenSwapService
 
     helpers ConfigHelper
 
-    get "/" do
-      config.has_encryption_secret?.inspect
-    rescue StandardError => e
-      json error: e
-    end
-
     post "/api/token" do
       http = HTTP.new.token(auth_code: params[:code])
       status_code, response = EncryptionMiddleware.new(http).run
