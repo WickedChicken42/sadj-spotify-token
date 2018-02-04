@@ -5,8 +5,7 @@ require "dotenv/load" if File.exists?(".env")
 require "active_support/all"
 require "base64"
 require "encrypted_strings"
-require "net/http"
-require "net/https"
+require "httparty"
 
 module SpotifyTokenSwapService
 
@@ -31,10 +30,10 @@ module SpotifyTokenSwapService
   class Config < Struct.new(:client_id, :client_secret,
                             :client_callback_url, :encryption_secret)
     def initialize
-      # self.client_id = ENV["SPOTIFY_CLIENT_ID"]
-      # self.client_secret = ENV["SPOTIFY_CLIENT_SECRET"]
-      # self.client_callback_url = ENV["SPOTIFY_CLIENT_CALLBACK_URL"]
-      # self.encryption_secret = ENV["ENCRYPTION_SECRET"]
+      self.client_id = ENV["SPOTIFY_CLIENT_ID"]
+      self.client_secret = ENV["SPOTIFY_CLIENT_SECRET"]
+      self.client_callback_url = ENV["SPOTIFY_CLIENT_CALLBACK_URL"]
+      self.encryption_secret = ENV["ENCRYPTION_SECRET"]
 
       validate_client_credentials
     end
@@ -56,6 +55,14 @@ module SpotifyTokenSwapService
     end
   end
 
+  # SpotifyTokenSwapService::HTTP
+  #
+  # The code needed to make it go all Sinatra, beautiful.
+  #
+  class HTTP
+    include HTTParty
+  end
+
   # SpotifyTokenSwapService::App
   #
   # The code needed to make it go all Sinatra, beautiful.
@@ -63,13 +70,12 @@ module SpotifyTokenSwapService
   class App < Sinatra::Base
     set :root, File.dirname(__FILE__)
 
-    helpers ConfigHelper
-
     before do
-      content_type :json
       headers 'Access-Control-Allow-Origin' => '*',
               'Access-Control-Allow-Methods' => %w(OPTIONS GET POST)
     end
+
+    helpers ConfigHelper
 
     get "/" do
       config.has_encryption_secret?.inspect
