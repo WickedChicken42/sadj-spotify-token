@@ -8,8 +8,6 @@ require "dotenv/load"
 require "active_support/all"
 
 module SpotifyTokenSwapService
-  set :root, File.dirname(__FILE__)
-
   # SpotifyTokenSwapService::Config
   #
   # This deals with configuration, loaded through .env
@@ -35,6 +33,8 @@ module SpotifyTokenSwapService
   # The code needed to make it go all Sinatra, beautiful.
   #
   class App < Sinatra::Base
+    set :root, File.dirname(__FILE__)
+
     helpers ConfigHelper
 
     get "/" do
