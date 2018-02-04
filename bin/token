@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require File.dirname(File.realpath(__FILE__)) + "/../spotify_token_swap_service.rb"
+
+auth_code = ARGV[0]
+
+http = SpotifyTokenSwapService::HTTP.new.token(auth_code: auth_code)
+_, response = SpotifyTokenSwapService::EncryptionMiddleware.new(http).run
+
+puts JSON.pretty_generate(response)
