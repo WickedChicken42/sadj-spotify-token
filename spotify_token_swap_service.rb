@@ -203,7 +203,7 @@ module SpotifyTokenSwapService
       json response
     rescue OpenSSL::Cipher::CipherError
       status 400
-      json error:
+      json error: "invalid refresh token"
     rescue StandardError => e
       status 400
       json error: e
