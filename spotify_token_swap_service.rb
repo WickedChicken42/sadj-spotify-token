@@ -5,6 +5,7 @@ require "base64"
 require "json"
 require "encrypted_strings"
 require "dotenv/load"
+require "active_support/all"
 
 module SpotifyTokenSwapService
   set :root, File.dirname(__FILE__)
@@ -13,6 +14,12 @@ module SpotifyTokenSwapService
   #
   # This deals with configuration, loaded through .env
   #
+  module ConfigHelper
+    def config
+      @config ||= Config.new
+    end
+  end
+
   class Config < Struct.new(:client_id, :client_secret,
                             :client_callback_url, :encryption_secret)
     def initialize
@@ -28,6 +35,12 @@ module SpotifyTokenSwapService
   # The code needed to make it go all Sinatra, beautiful.
   #
   class App < Sinatra::Base
+    helpers ConfigHelper
+
+    get "/" do
+      config.inspect
+    end
+
     post "/api/swap_for_access_token" do
       "Hi world"
     end
