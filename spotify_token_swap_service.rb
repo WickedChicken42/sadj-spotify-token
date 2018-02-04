@@ -183,6 +183,11 @@ module SpotifyTokenSwapService
 
     helpers ConfigHelper
 
+    # POST /api/token
+    # Convert an authorization code to an access token.
+    #
+    # @param code The authorization code sent from accounts.spotify.com
+    #
     post "/api/token" do
       http = HTTP.new.token(auth_code: params[:code])
       status_code, response = EncryptionMiddleware.new(http).run
@@ -194,6 +199,11 @@ module SpotifyTokenSwapService
       json error: e
     end
 
+    # POST /api/refresh_token
+    # Use a refresh token to generate a one-hour access token.
+    #
+    # @param refresh_token The refresh token provided from /api/token
+    #
     post "/api/refresh_token" do
       params = DecryptParameters.new(params).run
       http = HTTP.new.refresh_token(refresh_token: params[:refresh_token])
