@@ -76,12 +76,19 @@ module SpotifyTokenSwapService
       self.class.post("/api/token", options)
     end
 
+    def refresh_token(refresh_token:)
+      options = default_options.deep_merge(query: {
+        grant_type: "refresh_token",
+        refresh_token: refresh_token
+      })
+
+      self.class.post("/api/token", options)
+    end
+
     private
 
     def default_options
-      {
-        headers: { Authorization: authorization_basic }
-      }
+      { headers: { Authorization: authorization_basic } }
     end
 
     def authorization_basic
@@ -114,11 +121,12 @@ module SpotifyTokenSwapService
     end
   end
 
+  # SpotifyTokenSwapService::DecryptParameters
   # SpotifyTokenSwapService::DecryptionMiddleware
   #
   # The code needed to apply decryption middleware for refresh tokens.
   #
-  class DecryptionMiddleware < Struct.new(:params)
+  class DecryptParameters < Struct.new(:params)
     include ConfigHelper
 
     def run
@@ -133,6 +141,15 @@ module SpotifyTokenSwapService
       if config.has_encryption_secret?
         refresh_token.decrypt(:symmetric, password: config.encryption_secret)
       end || refresh_token
+    end
+  end
+
+  class DecryptionMiddleware < Struct.new(:httparty_instance)
+    include ConfigHelper
+
+    def run
+      response = httparty_response.parsed_response.with_indifferent_access
+      [httparty_response.response.code.to_i, response]
     end
   end
 
@@ -156,14 +173,23 @@ module SpotifyTokenSwapService
       json error: e
     end
 
-    post "/api/swap_for_access_token" do
-      "Hi world"
+    post "/api/token" do
+      http = HTTP.new.token(auth_code: params[:code])
+      status_code, response = EncryptionMiddleware.new(http).run
+
+      status status_code
+      json response
     rescue StandardError => e
       json error: e
     end
 
     post "/api/refresh_token" do
-      "Hey world"
+      params = DecryptParameters.new(params).run
+      http = HTTP.new.refresh_token(refresh_token: params[:refresh_token]).run
+      status_code, response = DecryptionMiddleware.new(http).run
+
+      status status_code
+      json response
     rescue StandardError => e
       json error: e
     end
