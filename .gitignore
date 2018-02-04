@@ -1,5 +1,2 @@
-# Global OSX https://github.com/github/
+.env
 .DS_Store
-.AppleDouble
-.LSOverride
-Icon

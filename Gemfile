@@ -3,3 +3,4 @@ ruby "2.5.0" # https://devcenter.heroku.com/articles/ruby-support#supported-runt
 
 gem "sinatra"
 gem "encrypted_strings"
+gem "dotenv"

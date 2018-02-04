@@ -4,6 +4,7 @@ require 'net/https'
 require 'base64'
 require 'json'
 require 'encrypted_strings'
+require 'dotenv/load'
 
 # This is an example token swap service written
 # as a Ruby/Sinatra service. This is required by
@@ -37,19 +38,19 @@ require 'encrypted_strings'
 #
 # Find your app at https://developer.spotify.com/my-applications/#!/applications
 
-CLIENT_ID = "e6695c6d22214e0f832006889566df9c" # TODO: Get it from Spotify
-CLIENT_SECRET = "29eb02041ba646179a1189dccac112c7" # TODO: Get it from Spotify
-CLIENT_CALLBACK_URL = "spotifyiossdkexample://" # TODO: Get it from Spotify
+# Get this from Spotify
+CLIENT_ID = ENV["CLIENT_ID"]
+CLIENT_SECRET = ENV["CLIENT_SECRET"]
+CLIENT_CALLBACK_URL = ENV["CLIENT_CALLBACK_URL"]
 
-# I don't think the secret should be changed...
-ENCRYPTION_SECRET = "cFJLyifeUJUBFWdHzVbykfDmPHtLKLGzViHW9aHGmyTLD8hGXC"
+# This should be unique to your application
+ENCRYPTION_SECRET = ENV["ENCRYPTION_SECRET"]
 
 AUTH_HEADER = "Basic " + Base64.strict_encode64(CLIENT_ID + ":" + CLIENT_SECRET)
 SPOTIFY_ACCOUNTS_ENDPOINT = URI.parse("https://accounts.spotify.com")
 
 #set :port, 1234 # Don't need on Heroku
 set :bind, '0.0.0.0' # IP address of the interface to listen on (all)
-
 
 post '/swap' do
 
