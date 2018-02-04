@@ -10,18 +10,26 @@ This is a tiny [Ruby][ruby] service for supporting [Authorization Code Flow][aut
 
 ## Contents 📖
 
-* [Use Case](#use-cases)
-* [How It Works](#how-it-works)
+* [Intro](#intro)
 * [Install](#install)
   * [One-click with Heroku](#one-click-with-heroku)
   * [Manual Install](#manual-install)
+* [How It Works](#how-it-works)
 * [Configuration](#configuration)
 * [API](#api)
   * [POST /api/token](#post-api-token)
   * [POST /api/refresh_token](#post-api-refresh-token)
+* [Code Samples](#code-samples)
+  * [Objective-C with Spotify iOS SDK](#objective-c-with-spotify-ios-sdk)
+  * [Swift](#swift)
+  * [Ruby](#ruby)
+  * [JavaScript](#javascript)
+* [Error Handling](#error-handling)
+  * [Token Swap Service](#token-swap-service)
+  * [Spotify Accounts API](#spotify-accounts-api)
 * [Contributing](#contributing)
 
-## Use Case
+## Intro
 
 When should I use [Authorization Code Flow][authorization-code-flow] instead of [Implicit Grant Flow][implicit-grant-flow]?
 
@@ -29,26 +37,6 @@ When should I use [Authorization Code Flow][authorization-code-flow] instead of 
 * You don't want to insecurely expose your client secret to third parties.
 
 Read more about token swapping [on Spotify for Developers][token-swap-refresh-guide].
-
-## How It Works
-
-When authenticating users with your Spotify application, you can authenticate them through two ways: [Implicit Grant Flow][implicit-grant-flow] and [Authorization Code Flow][authorization-code-flow].
-
-### Implicit Grant Flow
-
-You don't need to setup this service, and you can close your window.
-
-The Implicit Grant Flow returns an `access_token` directly back to your application once the user has authorized your application. It expires in 60 minutes, after which the user has to re-authorize your application.
-
-### Authorization Code Flow
-
-**Recommended**
-
-The Authorization Code Flow returns a `code` directly back to your application once the user has authorized your application. This `code` can be exchanged for an `access_token` through the Spotify Accounts API.
-
-This could be performed directly inside of your iOS, Android, or static web apps and will work as intended - but it is extremely insecure as it exposes your client secret to the world. **This should never be done for production apps, ever.**
-
-The right way is to handle the "exchange" on a server and have your application call that server. This would securely store your client secret away from developers who might reverse engineer your iOS, Android, or static web apps. **This repository contains said simple exchange server.**
 
 ## Install
 
@@ -75,6 +63,26 @@ $ cp .sample.env .env
 $ vim .env
 $ rackup
 ```
+
+## How It Works
+
+When authenticating users with your Spotify application, you can authenticate them through two ways: [Implicit Grant Flow][implicit-grant-flow] and [Authorization Code Flow][authorization-code-flow].
+
+### Implicit Grant Flow
+
+You don't need to setup this service, and you can close your window.
+
+The Implicit Grant Flow returns an `access_token` directly back to your application once the user has authorized your application. It expires in 60 minutes, after which the user has to re-authorize your application.
+
+### Authorization Code Flow
+
+**Recommended**
+
+The Authorization Code Flow returns a `code` directly back to your application once the user has authorized your application. This `code` can be exchanged for an `access_token` through the Spotify Accounts API.
+
+This could be performed directly inside of your iOS, Android, or static web apps and will work as intended - but it is extremely insecure as it exposes your client secret to the world. **This should never be done for production apps, ever.**
+
+The right way is to handle the "exchange" on a server and have your application call that server. This would securely store your client secret away from developers who might reverse engineer your iOS, Android, or static web apps. **This repository contains said simple exchange server.**
 
 ## Configuration
 
@@ -114,7 +122,7 @@ $ bin/token "[code]"
   "token_type": "Bearer",
   "expires_in": 3600,
   "refresh_token":
-    "p7jJ+3agZ8m9aBMZdiTq85wqNIl26ctbMgCPFKlRBanVgB+kht2hDmrCDL5V\nvRFQS9s1vBsWkpBCC0kbA6srol8NrKaHzY1tNrvDRFoN7xumQId8agd6Tqs6\nM8ypEhvTDElFbt1cMxd+N3z0JG3gSmSPk2h8/idwVBub0cqyCSacf4GPpnwW\nCg==\n",
+    "p7jJ+3agZ8m9aBMZdiTq85wqNIl16ctbMgCPFOlRBanVgB+kht2hDmrCDL5V\nvRFQS9s1vBsWkpBCC0kbA6srol8NrKaHzY1tNrvDRFoN7xumQId8agd6Tqs6\nM8ypEhvTDElFbt1cMxd+N3z0JG3gSmOPk2h8/idwVBub0cqyCSacf4GPpnwW\nCg==\n",
   "scope": "user-read-private"
 }
 ```
@@ -138,27 +146,104 @@ $ bin/refresh_token "[refresh token]"
 ```json
 {
   "access_token":
-    "BQDjrNCJ66N1utnFnpgcPZy8yD8KSsGN_zC1qP6jg1xeWfCl_slv8LGig_ia8bHynxFuSs-PvmHp-_6U13cBPR8469s66KmWxxdOsHCN00Gg5AgX3wyZYJLX0V-HqiXqCNdzDVShlzFaPEHJbKbm73TWJDHTG4c",
+    "BQCjHuWkG2pSAFaa7-zQJQWjylilINTpUbfRbRgJtAMJrBF9h3vg-N6bnaG9XCKYE8ceAsGgTGwbeO8MfbZKlYbyHG4B7EOeIUlTo0wn08PgkQZGjBzMYQwzNwr_pmel4pCgKOiEyH9Zc8L6iss3anLSSg6IWag",
   "token_type": "Bearer",
   "expires_in": 3600,
-  "refresh_token":
-    "p7jJ+3agZ8m9aBMZdiTq85wqNIl26ctbMgCPFKlRBanVgB+kht2hDmrCDL5V\nvRFQS9s1vBsWkpBCC0kbA6srol8NrKaHzY1tNrvDRFoN7xumQId8agd6Tqs6\nM8ypEhvTDElFbt1cMxd+N3z0JG3gSmSPk2h8/idwVBub0cqyCSacf4GPpnwW\nCg==\n",
   "scope": "user-read-private"
 }
 ```
 
 ## Code Samples
 
-### (iOS) Objective-C
+### Objective-C with Spotify iOS SDK
 
 ```objc
+// Swapping code for access_token
 NSURL *swapServiceURL = [NSURL urlWithString:@"http://yourapp.herokuapp.com/api/token"];
 
-#
-# -[SPAuth handleAuthCallbackWithTriggeredAuthURL:url
-#                   tokenSwapServiceEndpointAtURL:swapServiceURL
-#                                        callback:callback];
+[SPAuth handleAuthCallbackWithTriggeredAuthURL:url
+        tokenSwapServiceEndpointAtURL:swapServiceURL
+        callback:callback];
 ```
+
+### Swift
+
+This is using the [Alamofire](https://github.com/Alamofire/Alamofire) Swift Framework.
+
+```swift
+import Alamofire
+
+// Swapping code for access_token
+Alamofire.request(.POST, "https://yourapp.herokuapp.com/api/token", ["code": "[code]"])
+
+// Swapping refresh_token for access_token
+Alamofire.request(.POST, "https://yourapp.herokuapp.com/api/refresh_token", ["refresh_token": "[refresh token]"])
+```
+
+### Ruby
+
+This is using the [HTTParty](https://github.com/jnunemaker/httparty) gem.
+
+```ruby
+require "httparty"
+
+# Swapping code for access_token
+HTTParty.post("https://yourapp.herokuapp.com/api/token", body: {
+  code: "[code]"
+}).parsed_response
+
+# Swapping refresh_token for access_token
+HTTParty.post("https://yourapp.herokuapp.com/api/refresh_token", body: {
+  refresh_token: "[refresh token]"
+}).parsed_response
+```
+
+### JavaScript
+
+```js
+// Swapping code for access_token
+fetch("https://yourapp.herokuapp.com/api/token", {
+  method: "POST",
+  body: JSON.stringify({
+    code: "[code]"
+  })
+}).then(res => res.json());
+
+// Swapping refresh_token for access_token
+fetch("https://yourapp.herokuapp.com/api/refresh_token", {
+  method: "POST",
+  body: JSON.stringify({
+    refresh_token: "[refresh token]"
+  })
+}).then(res => res.json());
+```
+
+## Error Handling
+
+The Token Swap Service will either return an error from our server, or a forwarded error from the Spotify Accounts API.
+
+### Token Swap Service
+
+It returns a JSON response with an `error` key, like as follows:
+
+```json
+{ "error": "invalid refresh_token" }
+```
+
+See [spotify_token_swap_service.rb](spotify_token_swap_service.rb) for more information.
+
+### Spotify Accounts API
+
+It will look something like this:
+
+```json
+{
+  "error": "invalid_grant",
+  "error_description": "Invalid authorization code"
+}
+```
+
+Read the [Authorization Guide][authorization-guide] for more information.
 
 ## Contributing
 
@@ -183,6 +268,7 @@ All of the main code exists inside of `spotify_token_swap_service.rb`.
 [code-of-conduct]: https://github.com/spotify/code-of-conduct/blob/master/code-of-conduct.md
 [ruby]: https://ruby-lang.org
 [s4d]: https://beta.developer.spotify.com
+[authorization-guide]: https://beta.developer.spotify.com/documentation/general/guides/authorization-guide/
 [authorization-code-flow]: https://beta.developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
 [implicit-grant-flow]: https://beta.developer.spotify.com/documentation/general/guides/authorization-guide/#implicit-grant-flow
 [token-swap-refresh-guide]: https://beta.developer.spotify.com/documentation/ios-sdk/guides/token-swap-and-refresh/
