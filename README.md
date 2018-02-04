@@ -1,11 +1,8 @@
-Spotify Token Swap Service for Heroku
-=======
+# Spotify Token Swap Service for Heroku
 
-To use the new [Spotify SDK](https://github.com/spotify/ios-sdk) we are required to run our own [Token Exchange Service](https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/#setting-up-your-token-exchange-service). This repository provides you with an easy installation on [Heroku](http://heroku.com/home). The current `CLIENT_ID`, `CLIENT_SECRET` and `CLIENT_CALLBACK_URL` are straight from [Spotifys Repo](https://github.com/spotify/ios-sdk/tree/master/Demo%20Projects) and work with their example apps. 
+To use the new [Spotify SDK](https://github.com/spotify/ios-sdk) we are required to run our own [Token Exchange Service](https://developer.spotify.com/technologies/spotify-ios-sdk/tutorial/#setting-up-your-token-exchange-service). This repository provides you with an easy installation on [Heroku](http://heroku.com/home). The current `CLIENT_ID`, `CLIENT_SECRET` and `CLIENT_CALLBACK_URL` are straight from [Spotifys Repo](https://github.com/spotify/ios-sdk/tree/master/Demo%20Projects) and work with their example apps.
 
-
-Setup
-=======
+# Setup
 
 * Sign up for [Heroku](https://signup.heroku.com/) and follow the first two [Getting Started Steps](https://devcenter.heroku.com/articles/getting-started-with-ruby#introduction)
 
@@ -55,9 +52,7 @@ Or run the Spotify examples with a corrected `kTokenSwapServiceURL` and `kTokenR
 
 As mentioned above the current code is configured to what Spotify provided us. So you need to syncronize the `CLIENT_ID`, `CLIENT_SECRET` and `CLIENT_CALLBACK_URL` between your [Spotify Account](https://developer.spotify.com/my-applications/#!/applications), your iOS App and the `spotify_token_swap.rb`.
 
-
-Run Locally
-=======
+# Run Locally
 
 ```bash
 bundle install
@@ -66,9 +61,16 @@ foreman start
 
 `foreman`is part of the [Heroku Toolbelt](https://devcenter.heroku.com/articles/getting-started-with-ruby#set-up).
 
+# Contributing
 
-Convenience
-=======
+## Access the console
+
+```bash
+bundle install
+bin/console
+```
+
+# Convenience
 
 I personally will host an instance on Heroku for public use as it is very annoying to go through setting everything up when you just want to try something with the SDK. I'll keep it on the free plan and won't pay much attention to it. We'll see how it goes but if the service it getting slammed it'll crash, so be polite.
 
