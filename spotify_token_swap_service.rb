@@ -132,10 +132,18 @@ module SpotifyTokenSwapService
   class DecryptParameters < Struct.new(:params)
     include ConfigHelper
 
+    def initialize(params)
+      self.params = params
+    end
+
+    def refresh_token
+      params[:refresh_token]
+    end
+
     def run
-      params = params.with_indifferent_access
-      params[:refresh_token] = decrypt_refresh_token(params[:refresh_token])
-      params
+      params.merge({
+        refresh_token: decrypt_refresh_token(refresh_token)
+      })
     end
 
     private
