@@ -214,9 +214,6 @@ module SpotifyTokenSwapService
     rescue OpenSSL::Cipher::CipherError
       status 400
       json error: "invalid refresh_token"
-    rescue NoMethodError => e
-      status 400
-      json error: "no refresh_token provided"
     rescue StandardError => e
       status 400
       json error: e
