@@ -122,7 +122,6 @@ module SpotifyTokenSwapService
   end
 
   # SpotifyTokenSwapService::DecryptParameters
-  # SpotifyTokenSwapService::DecryptionMiddleware
   #
   # The code needed to apply decryption middleware for refresh tokens.
   #
@@ -144,7 +143,12 @@ module SpotifyTokenSwapService
     end
   end
 
-  class DecryptionMiddleware < Struct.new(:httparty_instance)
+  # SpotifyTokenSwapService::EmptyMiddleware
+  #
+  # Similar to EncryptionMiddleware, but it does nothing except
+  # comply with our DSL for middleware - [status code, response]
+  #
+  class EmptyMiddleware < Struct.new(:httparty_instance)
     include ConfigHelper
 
     def run
@@ -186,7 +190,7 @@ module SpotifyTokenSwapService
     post "/api/refresh_token" do
       params = DecryptParameters.new(params).run
       http = HTTP.new.refresh_token(refresh_token: params[:refresh_token]).run
-      status_code, response = DecryptionMiddleware.new(http).run
+      status_code, response = EmptyMiddleware.new(http).run
 
       status status_code
       json response
