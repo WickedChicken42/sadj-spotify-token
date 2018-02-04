@@ -124,6 +124,7 @@ module SpotifyTokenSwapService
     def run
       params = params.with_indifferent_access
       params[:refresh_token] = decrypt_refresh_token(params[:refresh_token])
+      params
     end
 
     private
