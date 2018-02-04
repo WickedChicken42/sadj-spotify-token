@@ -1,10 +1,10 @@
-require 'sinatra'
-require 'net/http'
-require 'net/https'
-require 'base64'
-require 'json'
-require 'encrypted_strings'
-require 'dotenv/load'
+require "sinatra"
+require "net/http"
+require "net/https"
+require "base64"
+require "json"
+require "encrypted_strings"
+require "dotenv/load"
 
 # This is an example token swap service written
 # as a Ruby/Sinatra service. This is required by
@@ -39,14 +39,14 @@ require 'dotenv/load'
 # Find your app at https://developer.spotify.com/my-applications/#!/applications
 
 # Get this from Spotify
-CLIENT_ID = ENV["CLIENT_ID"]
-CLIENT_SECRET = ENV["CLIENT_SECRET"]
-CLIENT_CALLBACK_URL = ENV["CLIENT_CALLBACK_URL"]
+SPOTIFY_CLIENT_ID = ENV["SPOTIFY_CLIENT_ID"]
+SPOTIFY_CLIENT_SECRET = ENV["SPOTIFY_CLIENT_SECRET"]
+SPOTIFY_CLIENT_CALLBACK_URL = ENV["SPOTIFY_CLIENT_CALLBACK_URL"]
 
 # This should be unique to your application
 ENCRYPTION_SECRET = ENV["ENCRYPTION_SECRET"]
 
-AUTH_HEADER = "Basic " + Base64.strict_encode64(CLIENT_ID + ":" + CLIENT_SECRET)
+AUTH_HEADER = "Basic " + Base64.strict_encode64(SPOTIFY_CLIENT_ID + ":" + SPOTIFY_CLIENT_SECRET)
 SPOTIFY_ACCOUNTS_ENDPOINT = URI.parse("https://accounts.spotify.com")
 
 #set :port, 1234 # Don't need on Heroku
@@ -70,7 +70,7 @@ post '/swap' do
 
     request.form_data = {
         "grant_type" => "authorization_code",
-        "redirect_uri" => CLIENT_CALLBACK_URL,
+        "redirect_uri" => SPOTIFY_CLIENT_CALLBACK_URL,
         "code" => auth_code
     }
 
