@@ -132,8 +132,8 @@ module SpotifyTokenSwapService
   class DecryptParameters < Struct.new(:params)
     include ConfigHelper
 
-    def initialize(params)
-      self.params = params
+    def initialize(_params)
+      self.params = _params.with_indifferent_access
     end
 
     def refresh_token
@@ -205,15 +205,18 @@ module SpotifyTokenSwapService
     # @param refresh_token The refresh token provided from /api/token
     #
     post "/api/refresh_token" do
-      params = DecryptParameters.new(params).run
-      http = HTTP.new.refresh_token(refresh_token: params[:refresh_token])
+      refresh_params = DecryptParameters.new(params).run
+      http = HTTP.new.refresh_token(refresh_token: refresh_params[:refresh_token])
       status_code, response = EmptyMiddleware.new(http).run
 
       status status_code
       json response
     rescue OpenSSL::Cipher::CipherError
       status 400
-      json error: "invalid refresh token"
+      json error: "invalid refresh_token"
+    rescue NoMethodError => e
+      status 400
+      json error: "no refresh_token provided"
     rescue StandardError => e
       status 400
       json error: e
