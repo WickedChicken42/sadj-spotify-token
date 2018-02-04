@@ -1,3 +1,5 @@
+# Copyright (c) 2015-2018 Spotify AB
+
 require "sinatra"
 require "sinatra/json"
 require "sinatra/reloader" if File.exists?(".env")
