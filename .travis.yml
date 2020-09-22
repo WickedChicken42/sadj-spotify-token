@@ -1,13 +1,34 @@
 ---
-language: ruby
-rvm:
-  - 2.3.6
-  - 2.4.0
-  - 2.4.1
-  - 2.4.3
-  - 2.5.0
-install:
-  - gem install bundler
-  - bundle install
-script:
-  - bundle exec rake spec
+stages:
+  - test
+  - name: release
+    if: branch = master
+_ruby_job: &ruby_job
+  stage: test
+  language: ruby
+  install:
+    - gem install bundler:1.17.2
+    - bundle install
+jobs:
+  include:
+    - rvm: 2.3.6
+      <<: *ruby_job
+    - rvm: 2.4.0
+      <<: *ruby_job
+    - rvm: 2.4.1
+      <<: *ruby_job
+    - rvm: 2.4.3
+      <<: *ruby_job
+    - rvm: 2.5.0
+      <<: *ruby_job
+    - stage: release
+      language: shell
+      services:
+        - docker
+      env:
+        - DOCKER_VERSION=1.0.0
+      script:
+        - echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
+        - docker build -t $DOCKER_IMAGE:$DOCKER_VERSION -t $DOCKER_IMAGE:latest .
+        - docker push $DOCKER_IMAGE:$DOCKER_VERSION
+        - docker push $DOCKER_IMAGE:latest
