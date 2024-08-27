@@ -8,11 +8,11 @@ require "encrypted_strings"
 require "singleton"
 require "httparty"
 
-module SpotifyTokenSwapService
+module SQTheatreSpotifyToken
 
-  # SpotifyTokenSwapService::ConfigHelper
-  # SpotifyTokenSwapService::ConfigError
-  # SpotifyTokenSwapService::Config
+  # SQTheatreSpotifyToken::ConfigHelper
+  # SQTheatreSpotifyToken::ConfigError
+  # SQTheatreSpotifyToken::Config
   #
   # This deals with configuration, loaded through .env
   #
@@ -58,7 +58,7 @@ module SpotifyTokenSwapService
     end
   end
 
-  # SpotifyTokenSwapService::HTTP
+  # SQTheatreSpotifyToken::HTTP
   #
   # Make the HTTP requests, as handled by our lovely host, HTTParty.
   #
@@ -100,7 +100,7 @@ module SpotifyTokenSwapService
     end
   end
 
-  # SpotifyTokenSwapService::EncryptionMiddleware
+  # SQTheatreSpotifyToken::EncryptionMiddleware
   #
   # The code needed to apply encryption middleware for refresh tokens.
   #
@@ -126,7 +126,7 @@ module SpotifyTokenSwapService
     end
   end
 
-  # SpotifyTokenSwapService::DecryptParameters
+  # SQTheatreSpotifyToken::DecryptParameters
   #
   # The code needed to apply decryption middleware for refresh tokens.
   #
@@ -156,7 +156,7 @@ module SpotifyTokenSwapService
     end
   end
 
-  # SpotifyTokenSwapService::EmptyMiddleware
+  # SQTheatreSpotifyToken::EmptyMiddleware
   #
   # Similar to EncryptionMiddleware, but it does nothing except
   # comply with our DSL for middleware - [status code, response]
@@ -170,7 +170,7 @@ module SpotifyTokenSwapService
     end
   end
 
-  # SpotifyTokenSwapService::App
+  # SQTheatreSpotifyToken::App
   #
   # The code needed to make it go all Sinatra, beautiful.
   #

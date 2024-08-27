@@ -1,5 +1,5 @@
 {
-  "name": "Spotify Token Swap Service",
+  "name": "SQ Theatre Spotify Token",
   "description":
     "Swap tokens for using Spotify APIs and SDKs, made really simple 🔑 ⛓",
   "keywords": ["spotify", "authorization code", "ruby", "sinatra", "heroku"],

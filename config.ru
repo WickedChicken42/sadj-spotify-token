@@ -1,2 +1,2 @@
-require "./spotify_token_swap_service"
-run SpotifyTokenSwapService::App
+require "./sqtheatre-spotify-token"
+run SQTheatreSpotifyToken:App
