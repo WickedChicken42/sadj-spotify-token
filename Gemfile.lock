@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/pluginaweek/encrypted_strings.git
+  remote: git://github.com/pluginaweek/encrypted_strings.git
   revision: a9bea6b48b910e24e762662d8816709100906756
   specs:
     encrypted_strings (0.3.3)
@@ -29,6 +29,9 @@ GEM
     multi_xml (0.6.0)
     mustermann (3.0.2)
       ruby2_keywords (~> 0.0.1)
+    nio4r (2.7.3)
+    puma (6.4.2)
+      nio4r (~> 2.0)
     rack (2.2.9)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
@@ -73,10 +76,11 @@ DEPENDENCIES
   dotenv
   encrypted_strings!
   httparty
+  puma
   rake
   rspec
   sinatra
   sinatra-contrib
 
 BUNDLED WITH
-   2.1.4
+   1.17.2
